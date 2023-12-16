@@ -1,39 +1,27 @@
-const { Command } = require("commander");
-// console.log("Hello");
-// const program = new Command();
-// program
-//   .option("-a, --action <type>", "choose action")
-//   .option("-i, --id <type>", "user id")
-//   .option("-n, --name <type>", "user name")
-//   .option("-e, --email <type>", "user email")
-//   .option("-p, --phone <type>", "user phone");
+const argv = require("yargs").argv;
+const contacts = require("./contacts");
 
-// program.parse(process.argv);
+function invokeAction({ action, id, name, email, phone }) {
+  switch (action) {
+    case "list":
+      contacts.listContacts();
+      break;
 
-// const argv = program.opts();
+    case "get":
+      contacts.getContactById(id);
+      break;
 
-// // TODO: рефакторити
-// function invokeAction({ action, id, name, email, phone }) {
-//   switch (action) {
-//     case "list":
-//       // ...
-//       break;
+    case "add":
+      // ... name email phone
+      break;
 
-//     case "get":
-//       // ... id
-//       break;
+    case "remove":
+      // ... id
+      break;
 
-//     case "add":
-//       // ... name email phone
-//       break;
+    default:
+      console.warn("\x1B[31m Unknown action type!");
+  }
+}
 
-//     case "remove":
-//       // ... id
-//       break;
-
-//     default:
-//       console.warn("\x1B[31m Unknown action type!");
-//   }
-// }
-
-// invokeAction(argv);
+invokeAction(argv);
