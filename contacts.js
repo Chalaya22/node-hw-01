@@ -2,11 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 
 const contactsPath = path.resolve("./db/contacts.json");
-// TODO: задокументувати кожну функцію
-// function listContacts() {
-//   // ...твій код. Повертає масив контактів.
-//    const contacts = await fs.readFile(contactsPath);
-// }
+
 const listContacts = async () => {
   const result = await fs.readFile(contactsPath);
   const contacts = JSON.parse(result);
@@ -30,11 +26,21 @@ const getContactById = async (contactId) => {
 };
 getContactById("05olLMgyVQdWRwgKfg5J6");
 
-function removeContact(contactId) {
-  // ...твій код. Повертає об'єкт видаленого контакту. Повертає null, якщо контакт з таким id не знайдений.
-}
+const removeContact = async (contactId) => {
+  const result = await fs.readFile(contactsPath);
+  const contacts = JSON.parse(result);
+  const newContact = contacts.filter((contact) => contact.id !== contactId);
+  console.log(
+    `Current contact : ${contactId} was removed .New list of contacts :`
+  );
+  console.table(newContact);
+  if (newContact.length === contacts.length) {
+    console.log(`Phone book contact by ID "${contactId}" not found!`);
+  }
+};
+removeContact("qdggE76Jtbfd9eWJHrssH");
 
-function addContact(name, email, phone) {
-  // ...твій код. Повертає об'єкт доданого контакту.
-}
+const addContact = async (name, email, phone) => {
+  const result = await fs.appendFile(contactsPath);
+};
 module.exports = { listContacts, getContactById, removeContact, addContact };

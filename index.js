@@ -12,11 +12,10 @@ function invokeAction({ action, id, name, email, phone }) {
       break;
 
     case "add":
-      // ... name email phone
       break;
 
     case "remove":
-      // ... id
+      contacts.removeContact(id);
       break;
 
     default:
