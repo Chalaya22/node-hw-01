@@ -29,9 +29,9 @@ getContactById("05olLMgyVQdWRwgKfg5J6");
 const removeContact = async (contactId) => {
   const result = await fs.readFile(contactsPath);
   const contacts = JSON.parse(result);
-  const newContact = contacts.filter((contact) => contact.id !== contactId);
+  const newContact = contacts.filter((contact) => contact.id === contactId);
   console.log(
-    `Current contact : ${contactId} was removed .New list of contacts :`
+    `Contact  ${contactId} was removed .Object of delated contacts :`
   );
   console.table(newContact);
   if (newContact.length === contacts.length) {
@@ -39,8 +39,3 @@ const removeContact = async (contactId) => {
   }
 };
 removeContact("qdggE76Jtbfd9eWJHrssH");
-
-const addContact = async (name, email, phone) => {
-  const result = await fs.appendFile(contactsPath);
-};
-module.exports = { listContacts, getContactById, removeContact, addContact };

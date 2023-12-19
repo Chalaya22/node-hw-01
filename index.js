@@ -11,7 +11,7 @@ function invokeAction({ action, id, name, email, phone }) {
       contacts.getContactById(id);
       break;
 
-    case "add":
+    case "add": // contacts.addContact();
       break;
 
     case "remove":
@@ -19,7 +19,6 @@ function invokeAction({ action, id, name, email, phone }) {
       break;
 
     default:
-      console.warn("\x1B[31m Unknown action type!");
   }
 }
 
