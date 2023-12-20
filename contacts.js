@@ -1,18 +1,22 @@
-const fs = require("fs/promises");
+const { error } = require("console");
+const { readFile } = require("fs");
+const fs = require("node:fs/promises");
 const path = require("path");
-
+const { nanoid } = require("nanoid");
 const contactsPath = path.resolve("./db/contacts.json");
 
 const listContacts = async () => {
-  const result = await fs.readFile(contactsPath);
+  const result = await fs.readFile(contactsPath, { encoding: "utf-8" });
   const contacts = JSON.parse(result);
   console.log("list of ContactsPhone: ");
   console.table(contacts);
 };
-listContacts();
+listContacts().catch((error) => {
+  console.log(error);
+});
 
 const getContactById = async (contactId) => {
-  const result = await fs.readFile(contactsPath);
+  const result = await fs.readFile(contactsPath, { encoding: "utf-8" });
   const contacts = JSON.parse(result);
   const contact = contacts.find((contact) => contact.id === contactId);
   console.log(`Get contact of phone by ID ${contactId}:`);
@@ -24,10 +28,12 @@ const getContactById = async (contactId) => {
     );
   }
 };
-getContactById("05olLMgyVQdWRwgKfg5J6");
+getContactById("05olLMgyVQdWRwgKfg5J6").catch((error) => {
+  console.log(error);
+});
 
 const removeContact = async (contactId) => {
-  const result = await fs.readFile(contactsPath);
+  const result = await fs.readFile(contactsPath, { encoding: "utf-8" });
   const contacts = JSON.parse(result);
   const newContact = contacts.filter((contact) => contact.id === contactId);
   console.log(
@@ -38,4 +44,27 @@ const removeContact = async (contactId) => {
     console.log(`Phone book contact by ID "${contactId}" not found!`);
   }
 };
-removeContact("qdggE76Jtbfd9eWJHrssH");
+removeContact("qdggE76Jtbfd9eWJHrssH").catch((error) => {
+  console.log(error);
+});
+
+const addContact = async (name, email, phone) => {
+  const result = await fs.readFile(contactsPath, { encoding: "utf-8" });
+  const contacts = JSON.parse(result);
+  contacts.push({
+    id: nanoid(),
+    name: name,
+    email: email,
+    phone: phone,
+  });
+
+  console.log("You added contact! New lists of contacts: ");
+  console.table(contacts);
+};
+addContact(
+  (name = "Mango"),
+  (email = "mango@gmail.com"),
+  (phone = "(748) 322 22 22")
+).catch((error) => {
+  console.log(error);
+});
