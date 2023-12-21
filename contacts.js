@@ -11,62 +11,59 @@ const listContacts = async () => {
   });
   const contacts = JSON.parse(result);
   console.log("list of ContactsPhone: ");
-  console.table(contacts);
+  return contacts;
 };
-listContacts().catch((error) => {
-  console.log(error);
-});
 
 const getContactById = async (contactId) => {
-  const result = await fs.readFile(contactsPath, { encoding: "utf-8" });
+  const result = await fs.readFile(contactsPath, {
+    encoding: "utf-8",
+  });
   const contacts = JSON.parse(result);
   const contact = contacts.find((contact) => contact.id === contactId);
-  console.log(`Get contact of phone by ID ${contactId}:`);
-  console.table(contact);
 
   if (contact == null) {
     console.log(
       `Contact by ID "${contactId}" not found in the contact of phone!`
     );
+  } else {
+    console.log("Contact by ID found in the contact of phone: ");
+    return contact;
   }
 };
-getContactById("05olLMgyVQdWRwgKfg5J6").catch((error) => {
-  console.log(error);
-});
 
 const removeContact = async (contactId) => {
   const result = await fs.readFile(contactsPath, { encoding: "utf-8" });
   const contacts = JSON.parse(result);
   const newContact = contacts.filter((contact) => contact.id === contactId);
-  console.log(
-    `Contact  ${contactId} was removed .Object of delated contacts :`
-  );
-  console.table(newContact);
+
   if (newContact.length === contacts.length) {
     console.log(`Phone book contact by ID "${contactId}" not found!`);
+  } else {
+    console.log(
+      `Contact  ${contactId} was removed .Object of delated contact :`
+    );
+    return newContact;
   }
 };
-removeContact("qdggE76Jtbfd9eWJHrssH").catch((error) => {
-  console.log(error);
-});
 
 const addContact = async (name, email, phone) => {
   const result = await fs.readFile(contactsPath, { encoding: "utf-8" });
   const contacts = JSON.parse(result);
-  contacts.push({
+  const newAddContact = {
     id: nanoid(),
-    name: name,
-    email: email,
-    phone: phone,
-  });
+    name,
+    email,
+    phone,
+  };
+  contacts.push(newAddContact);
 
-  console.log("You added contact! New lists of contacts: ");
-  console.table(contacts);
+  console.log("You added contact: ");
+  return newAddContact;
 };
-addContact(
-  (name = "Mango"),
-  (email = "mango@gmail.com"),
-  (phone = "(748) 322 22 22")
-).catch((error) => {
-  console.log(error);
-});
+
+module.exports = {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+};
