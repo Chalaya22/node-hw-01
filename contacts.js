@@ -1,5 +1,5 @@
 const { error } = require("console");
-const { readFile } = require("fs");
+const { readFile, writeFile } = require("fs");
 const fs = require("node:fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
@@ -33,9 +33,12 @@ async function removeContact(contactId) {
   if (index === -1) {
     return null;
   }
-  const [res] = contacts.splice(index, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return res;
+  const newContacts = [
+    ...contacts.slice(0, index),
+    ...contacts.slice(index + 1),
+  ];
+  await fs.writeFile(contactsPath, JSON.stringify(newContacts, null, 2));
+  return contacts[index];
 }
 
 const addContact = async (name, email, phone) => {
