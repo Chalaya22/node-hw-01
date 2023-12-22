@@ -21,30 +21,22 @@ const getContactById = async (contactId) => {
   const contacts = JSON.parse(result);
   const contact = contacts.find((contact) => contact.id === contactId);
 
-  if (contact == null) {
-    console.log(
-      `Contact by ID "${contactId}" not found in the contact of phone!`
-    );
-  } else {
-    console.log("Contact by ID found in the contact of phone: ");
-    return contact;
-  }
+  return contact || null;
 };
 
-const removeContact = async (contactId) => {
-  const result = await fs.readFile(contactsPath, { encoding: "utf-8" });
+async function removeContact(contactId) {
+  const result = await fs.readFile(contactsPath, {
+    encoding: "utf-8",
+  });
   const contacts = JSON.parse(result);
-  const newContact = contacts.filter((contact) => contact.id === contactId);
-
-  if (newContact.length === contacts.length) {
-    console.log(`Phone book contact by ID "${contactId}" not found!`);
-  } else {
-    console.log(
-      `Contact  ${contactId} was removed .Object of delated contact :`
-    );
-    return newContact;
+  const index = contacts.findIndex((contact) => contact.id === contactId);
+  if (index === -1) {
+    return null;
   }
-};
+  const [res] = contacts.splice(index, 1);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return res;
+}
 
 const addContact = async (name, email, phone) => {
   const result = await fs.readFile(contactsPath, { encoding: "utf-8" });
@@ -56,7 +48,7 @@ const addContact = async (name, email, phone) => {
     phone,
   };
   contacts.push(newAddContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, undefined, 2));
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
   console.log("You added contact: ");
   return newAddContact;
