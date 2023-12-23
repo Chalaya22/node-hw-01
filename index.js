@@ -1,6 +1,16 @@
 const Contacts = require("./contacts");
+const { Command } = require("commander");
+const program = new Command();
+program
+  .option("-a, --action <type>", "choose action")
+  .option("-i, --id <type>", "user id")
+  .option("-n, --name <type>", "user name")
+  .option("-e, --email <type>", "user email")
+  .option("-p, --phone <type>", "user phone");
 
-const argv = require("yargs").argv;
+program.parse(process.argv);
+
+const argv = program.opts();
 
 async function invokeAction({ action, id, name, email, phone }) {
   switch (action) {
@@ -33,6 +43,7 @@ async function invokeAction({ action, id, name, email, phone }) {
       return console.table(removedById);
 
     default:
+      console.log("Unknown action:(')");
   }
 }
 
